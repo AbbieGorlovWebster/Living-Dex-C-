@@ -13,10 +13,8 @@ namespace Living_Dex
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            DatabaseFacade PokedexFacade = new DatabaseFacade(new DatabaseHandler());
-            DatabaseFacade APICacheFacade = new DatabaseFacade(new APIAccess());
-            APICacheFacade.EnsureCreated();
-            PokedexFacade.EnsureCreated();
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            dbHandler.EnsureCreated();
         }
     }
 

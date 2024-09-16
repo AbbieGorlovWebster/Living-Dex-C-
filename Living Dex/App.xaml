@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:Living_Dex"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Styles/BoxViewStyles.xaml"/>
+	            <ResourceDictionary Source="/Styles/GlobalStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/Types.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
