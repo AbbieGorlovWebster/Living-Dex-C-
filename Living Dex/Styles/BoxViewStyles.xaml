@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--Arrow Icon-->
+    <DrawingImage x:Key="ArrowIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V330 H330 V0 H0 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="0" Y="0.00037501062615774572" />
+                </DrawingGroup.Transform>
+                <GeometryDrawing Brush="{DynamicResource OffWhiteBrush}" Geometry="F1 M330,330z M0,0z M250.606,154.389L100.606,4.393C94.749,-1.465 85.251,-1.465 79.393,4.394 73.536,10.252 73.536,19.749 79.394,25.607L218.787,164.997 79.393,304.394C73.536,310.252 73.536,319.749 79.394,325.607 82.322,328.536 86.161,330 90,330 93.839,330 97.678,328.536 100.607,325.606L250.606,175.602C253.42,172.789 255,168.974 255,164.996 255,161.018 253.42,157.202 250.606,154.389z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <!--Radial Brush-->
+    <RadialGradientBrush x:Key="LighterGreenToOffWhiteRadial">
+        <GradientStop Color="#d4e7cb"/>
+        <GradientStop Color="{DynamicResource OffWhite}" Offset="1"/>
+    </RadialGradientBrush>
+    
+    <!--Pokemon Image Style-->
+    <Style x:Key="PokemonImageStyle" TargetType="Image">
+        <Setter Property="Source" Value="../Images/fallback.png"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
