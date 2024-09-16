@@ -1,4 +1,6 @@
 ﻿using LivingDexLibrary;
+using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +19,9 @@ namespace Living_Dex;
 /// </summary>
 public partial class MainWindow : Window
 {
+
     private readonly APIAccess api = new();
+    private readonly Pokedex pokedex = new Pokedex();
 
     public MainWindow()
     {
@@ -26,10 +30,7 @@ public partial class MainWindow : Window
 
     private async void Button_Click(object sender, RoutedEventArgs e)
     {
-        var Text = await api.pokeAPICall("gender/2");
-        TestingText.Text = Text;
-
-        var db = new DatabaseHandler();
-        db.constructPokedex();
+        _ = pokedex.constructPokedex();
     }
+
 }
