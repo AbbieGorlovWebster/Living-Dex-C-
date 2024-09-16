@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Diagnostics;
 using System.Text.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace LivingDexLibrary;
@@ -11,13 +13,6 @@ public class APIAccess : DbContext
 {
     //Create HTTP Client
     private readonly HttpClient client = new HttpClient();
-
-    public DbSet<APICallResult> APIResults { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite("Data Source = APICache.db");
-    }
 
     public async Task<string> pokeAPICall(string query)
     {
@@ -29,7 +24,7 @@ public class APIAccess : DbContext
         var sqlRequest = "Select * FROM APIResults WHERE query = @query";
 
         //Open Database
-        using var database = new SqliteConnection("Data Source=APICache.db");
+        using var database = new SqliteConnection("Data Source=LivingDex.db");
         database.Open();
 
         using var requestCommand = new SqliteCommand(sqlRequest, database);
@@ -79,6 +74,48 @@ public class APIAccess : DbContext
         else
         {
             return data;
+        }
+    }
+
+    public async Task<string> ensureImageLocal(string imageName)
+    {
+        //Location Image Would/Will be saved to
+        string localPath = "./Images/" + imageName;
+
+        //Check if file is already downloaded
+        if (File.Exists(localPath))
+        {
+            //Image downloaded, return local path
+            Trace.WriteLine("Image Retrieved From Local : " + Path.GetFullPath(localPath));
+            return localPath;
+        }
+        else
+        {
+            //Image not found locally, attempt to get from Web
+
+            //Base URL
+            string baseURL = "https://raw.githubusercontent.com/AbbieGorlovWebster/Living-Dex-C-/master/Living%20Dex/Images/";
+
+            var response = await client.GetAsync(baseURL + imageName);
+
+            if (response.IsSuccessStatusCode)
+            { 
+                //Save image to local path
+                var byteArray = await response.Content.ReadAsByteArrayAsync();
+                await File.WriteAllBytesAsync(localPath, byteArray);
+
+                Trace.WriteLine("Image Retrieved From Web : " + baseURL + imageName + " : Saved To : " + localPath);
+
+                //Image downloaded, return local path
+                return localPath;
+            }
+            else
+            {
+                //Image not found locally, not found on web, go to fallback
+                Trace.WriteLine("No Image Found At : " + baseURL + imageName);
+                Console.Error.WriteLine("No Image Found At : " + baseURL + imageName);
+                return "./Images/Fallback.png";
+            }
         }
     }
 }
